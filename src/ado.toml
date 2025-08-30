@@ -1,0 +1,10 @@
+[general]
+titulo = "Skell's ADO"
+icono = "./img/icono.png"
+logo = "./img/logo.png"
+logotipo = "./img/logotipo.png"
+wide = "centered"
+sidebar_estado = "expanded"
+
+[desarrollo]
+debug = true
