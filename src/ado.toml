@@ -7,4 +7,4 @@ wide = "centered"
 sidebar_estado = "expanded"
 
 [desarrollo]
-debug = true
+debug = false
