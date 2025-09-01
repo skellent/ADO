@@ -51,6 +51,23 @@ def CerrarConexion(conector, debug: bool = True) -> None:
     except mariadb.Error as e:
         if debug: print(f"[bold red]Error al cerrar la conexion: {e}[/bold red]")
 
+# Se corrobora la conexion a la base de datos mediante la obtencion de las tablas
+# Si hay menos de 1 tabla, la base no esta completamente creada y el programa
+# No esta completamente instalado, asi que hay que crear la tabla de usuarios
+# y registrar al usuario admin
+def ValidarInstalacion(bd: dict, debug: bool = False) -> int:
+    tablas = ObtenerTablas(bd, debug=debug)
+    if type(tablas) == list: # Devolvio una lista vacia, conexion exitosa
+        if len(tablas) > 0: # Verifica si hay tablas en la base, de lo contrario devuelve 1 indicando instalacion pendiente
+            if ObtenerRegistrosDeTabla(bd, "usuarios", debug=debug) == "ERROR" or ObtenerRegistrosDeTabla(bd, "usuarios", debug=debug) == []:
+                return 1 # La tabla de usuarios no existe, por lo tanto la base de datos no esta completamente creada
+            return 0
+        return 1
+    elif type(tablas) == str and tablas == "ERROR":
+        # Hubo un error en la consulta, esto solo ocurre si la base de datos no existe o hay un error en la conexion
+        return "ERROR"
+    return 1
+
 # Funcion para crear la tabla de usuarios
 def CrearTablaUsuarios(bd: dict, debug: bool = False) -> int:
     if debug: print(bd)
