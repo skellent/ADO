@@ -13,6 +13,12 @@ import sys
 
 # Funcion para conectar a la base de datos
 def ConectarBD(usuario: str, contrasena: str, direccion: str, puerto: str, base_datos: str, debug: bool = False) -> mariadb.Connection:
+    """
+    Esta función devuelve un objeto mariadb.Connection el cual permite conectarse a la base y crear un cursor.
+    Requiere de sus respectivos parametros para poder conectarse correctamente
+
+    En caso de no lograr conectarse, cancelara la operacion y no retornara nada
+    """
     try:
         conn = mariadb.connect(
             user=usuario,
@@ -179,6 +185,71 @@ def AñadirUsuario(bd: dict, usuario: str, contrasena: str, tipo: int, debug: bo
     finally:
         CerrarConexion(cursor.connection, debug=debug)
 
+# Funcion para validar usuario en registro de sesion
+def ValidarUsuario(bd: dict, usuario: str, contrasena: str, debug: bool = False) -> bool | tuple | str: 
+    """
+    Esta funcion tiene dos tipos de retorno
+    - Si devuelve una tupla, es pq encontro un usuario
+    - Si devuelve "ERROR" es pq ocurrio un error con la consulta o base de datos
+    - Si devuelve un 0 es pq no encontro a un usuario
+    """
+    if debug: print("Validando usuario...")
+    cursor = CrearCursor(
+        ConectarBD(
+            bd["usuario"],
+            bd["contrasena"],
+            bd["direccion"],
+            bd["puerto"],
+            bd["base_datos"],
+            debug=debug
+        ),
+        debug=debug
+    )
+    try:
+        cursor.execute("SELECT * FROM usuarios WHERE usuario = ? AND contrasena = ?", (usuario, contrasena))
+        resultado = cursor.fetchone()
+        if resultado:
+            if debug: print(f"[bold green]Usuario validado exitosamente[/bold green]")
+            return resultado
+        else:
+            # Resultado None porque no habian usuarios
+            if debug: print(f"[bold yellow]Usuario o contraseña incorrectos[/bold yellow]")
+            return 0
+    except mariadb.Error as e:
+        if debug: print(f"[bold red]Error al validar el usuario: {e}[/bold red]")
+        return "ERROR"
+    finally:
+        CerrarConexion(cursor.connection, debug=debug)
+
+# Funcion para obtener el tipo de usuario
+def ObtenerCargoUsuario(bd: dict, usuario: str, debug: bool = False):
+    if debug: print("Obteniendo tipo de usuario...")
+    cursor = CrearCursor(
+        ConectarBD(
+            bd["usuario"],
+            bd["contrasena"],
+            bd["direccion"],
+            bd["puerto"],
+            bd["base_datos"],
+            debug=debug
+        ),
+        debug=debug
+    )
+    try:
+        cursor.execute("SELECT tipo FROM usuarios WHERE usuario = ?", (usuario,))
+        resultado = cursor.fetchone()
+        if resultado:
+            if debug: print(f"[bold green]Tipo de usuario obtenido exitosamente[/bold green]")
+            return resultado[0]
+        else:
+            if debug: print(f"[bold yellow]Usuario no encontrado[/bold yellow]")
+            return None
+    except mariadb.Error as e:
+        if debug: print(f"[bold red]Error al obtener el tipo de usuario: {e}[/bold red]")
+        return "ERROR"
+    finally:
+        CerrarConexion(cursor.connection, debug=debug)
+
 # Prueba de las funciones
 def main() -> None:
     print(
@@ -203,6 +274,19 @@ def main() -> None:
                 "puerto": int(CONSTANTES["puerto"]),
                 "base_datos": CONSTANTES["base_datos"]
             },
+            debug=True
+        )
+    )
+    print(
+        ObtenerCargoUsuario(
+            bd={
+                "usuario": CONSTANTES["usuario"],
+                "contrasena": CONSTANTES["contrasena"],
+                "direccion": CONSTANTES["direccion"],
+                "puerto": int(CONSTANTES["puerto"]),
+                "base_datos": CONSTANTES["base_datos"]
+            },
+            usuario="root",
             debug=True
         )
     )

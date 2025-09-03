@@ -1,19 +1,21 @@
 # Importacion de Streamlit
 import streamlit as st
+import streamlit_option_menu as StreamlitMenu
 
 # Importacion de Rich para mejorar la depuracion
 from rich import print
 from time import sleep as esperar
 
 # Importacion de Modulos, se importan como si fueran clases, para evitar problemas de nombres repetidos en casos particulares
-import modules.configuracion as Configuracion
+import modules.configuracion as ADOconfiguracion
 import modules.database as ADOdataBase
 import modules.instalacion as ADOinstalacion
+import modules.login as ADOlogin
 
 # Corroborar estado del DEBUG
 def DebugEstado() -> bool | str:
     # Obtencion de la Configuracion
-    CONSTANTES = Configuracion.cargar_constantes()
+    CONSTANTES = ADOconfiguracion.cargar_constantes()
     DEBUG = CONSTANTES["desarrollo"]["debug"]
     return DEBUG
 
@@ -21,7 +23,7 @@ def DebugEstado() -> bool | str:
 def main() -> None:
 
     # Configura la pagina
-    if Configuracion.Setup(): # si se cumple la condicion, hubo un error
+    if ADOconfiguracion.Setup(): # si se cumple la condicion, hubo un error
         st.error("Error al cargar la configuracion, revise la terminal para mas detalles")
         st.stop()
 
@@ -39,7 +41,11 @@ def main() -> None:
     elif estadoBD == 1: # La base de datos no esta completamente creada
         ADOinstalacion.instalacion()
     else: # La base de datos esta completamente creada y lista para usarse al igual que el programa
-        st.success("El Software esta completamente instalado y listo para usarse.")
+        if 'USER' not in st.session_state:
+            ADOlogin.login()
+        else:
+            st.title(f"Bienvenido, {st.session_state['USER']}")
+            st.write(st.session_state)
 
 # Ejecucion de la funcion Principal
 if __name__ == "__main__":
