@@ -33,7 +33,7 @@ class ADOconfiguracion():
                 page_title = instancia.configuraciones["general"]["titulo"],
                 page_icon = instancia.configuraciones["general"]["icono"],
                 layout = instancia.configuraciones["general"]["wide"],
-                initial_sidebar_state = instancia.configuraciones["general"]["sidebar_estado"],
+                initial_sidebar_state = 'collapsed',
             )
             # Configuracion del SideBar
             st.logo(

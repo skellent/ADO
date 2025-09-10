@@ -4,7 +4,10 @@ icono = "./img/icono.png"
 logo = "./img/logo.png"
 logotipo = "./img/logotipo.png"
 wide = "centered"
-sidebar_estado = "expanded"
+sidebar_estado = "collapsed"
 
 [desarrollo]
 debug = false
+
+[tablas]
+usuarios = "CREATE TABLE IF NOT EXISTS usuarios (id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, usuario VARCHAR(20) NOT NULL, contrasena VARCHAR(20) NOT NULL, tipo INT NOT NULL, fechaCreacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP, CHECK (LENGTH(usuario) >= 4), CHECK (LENGTH(contrasena) >= 8)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;"

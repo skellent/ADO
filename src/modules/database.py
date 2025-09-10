@@ -74,7 +74,7 @@ class ADOdatabase():
         
 
     # Consulta manual por parte del desarrollador para casos particulares
-    def ConsultaManual(instancia, consulta: str) -> list:
+    def ConsultaManual(instancia, consulta: str) -> tuple:
         """
         Esta funcion permite escribir consultas personalizadas para casos complejos.
         ARGUMENTOS:
@@ -85,6 +85,20 @@ class ADOdatabase():
             return instancia.cursor.fetchall()
         except Exception as e:
             print("Error al elaborar consulta manual: ", e)
+    
+    def CreacionInsercion(instancia, consulta: str) -> int:
+        """
+        Esta funcion permite crear tablas o insertar datos, retornando 1 o 0 para indicar el resultado de la accion.
+        ARGUMENTOS:
+        - consulta: La consulta escrita por el usuario.
+        """
+        try:
+            instancia.cursor.execute(consulta)
+            instancia.conexion.commit()
+            return 1
+        except Exception as e:
+            print("Error al elaborar consulta manual: ", e)
+            return 0
 
     # Constructor
     def __init__(instancia, database: dict) -> None:
@@ -97,15 +111,7 @@ class ADOdatabase():
         instancia.conexion, instancia.cursor = instancia.CrearConexion()
 
 
-""" CREATE TABLE IF NOT EXISTS usuarios (
-        id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        usuario VARCHAR(20) NOT NULL,
-        contrasena VARCHAR(20) NOT NULL,
-        tipo INT NOT NULL,
-        fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        CHECK (LENGTH(usuario) >= 4),
-        CHECK (LENGTH(contrasena) >= 8)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+""" 
 """
 
 # Funcion Principal | Prueba de las funciones
@@ -124,6 +130,8 @@ def main() -> None:
     print(ADOdb.ConsultarTabla("usuarios"))
     # Realizar Consulta Manual
     print(ADOdb.ConsultaManual("SELECT * FROM usuarios WHERE id = 2"))
+    # Consulta de usuario:
+    print(ADOdb.ConsultaManual(f"""SELECT * FROM usuarios WHERE usuario = '$root' AND contrasena = '311020081249r'"""))
 
 if __name__ == "__main__":
     main()
