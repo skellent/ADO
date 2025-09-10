@@ -3,26 +3,13 @@ import streamlit as st
 # Importacion de Rich para mejorar la depuracion
 from rich import print
 
-# Importacion de la configuracion
-from modules.configuracion import cargar_constantes
-CONSTANTES = cargar_constantes()
-DEBUG = CONSTANTES["desarrollo"]["debug"]
-if DEBUG:
-    print("[bold green]EL MODO DEBUG ESTA ACTIVO, TODAS LAS IMPRESIONES APARECERAN EN LA TERMINAL[/bold green]")
+# Importacion de clases
+from modules.configuracion import ADOconfiguracion
+from modules.database import ADOdatabase
 
-# Configuracion global de la aplicacion
-st.set_page_config(
-    page_title=CONSTANTES["general"]["titulo"],
-    page_icon=CONSTANTES["general"]["icono"],
-    layout=CONSTANTES["general"]["wide"],
-    initial_sidebar_state=CONSTANTES["general"]["sidebar_estado"],
-)
+# Declaracion de funcion Principal
+def main() -> None:
+    ADOconf: object = ADOconfiguracion()
+    ADOconf.SetupStreamlit()
 
-# Configuracion del SideBar
-st.logo(
-    image=CONSTANTES["general"]["logotipo"],
-    icon_image=CONSTANTES["general"]["logo"]
-)
-
-st.title("Hello, Streamlit!")
-st.write("This is a simple Streamlit app. in test2.py")
+main()
