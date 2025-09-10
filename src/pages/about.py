@@ -9,7 +9,10 @@ from modules.database import ADOdatabase
 
 # Declaracion de funcion Principal
 def main() -> None:
+    # Creacion de instancia de configuracion
     ADOconf: object = ADOconfiguracion()
     ADOconf.SetupStreamlit()
+
+    st.title("Acerca de Skell's ADO")
 
 main()

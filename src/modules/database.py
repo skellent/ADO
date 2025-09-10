@@ -64,6 +64,15 @@ class ADOdatabase():
         instancia.cursor.execute(f"""SELECT * FROM {tabla}""")
         return instancia.cursor.fetchall()
 
+    # Funcion para listar las tablax existentes en la base de datos
+    def ListarTablas(instancia) -> list:
+        """
+        Esta funcion simplemente revisa que tablas existen en la base de datos. en caso de no haber ninguna es porque el software no esta completamente instalado.
+        """
+        instancia.cursor.execute("""SHOW TABLES""")
+        return instancia.cursor.fetchall()
+        
+
     # Consulta manual por parte del desarrollador para casos particulares
     def ConsultaManual(instancia, consulta: str) -> list:
         """

@@ -1,10 +1,7 @@
-# Importacion de Streamlit
 import streamlit as st
-import streamlit_option_menu as StreamlitMenu
 
 # Importacion de Rich para mejorar la depuracion
 from rich import print
-from time import sleep as esperar
 
 # Importacion de clases
 from modules.configuracion import ADOconfiguracion
@@ -16,6 +13,6 @@ def main() -> None:
     ADOconf: object = ADOconfiguracion()
     ADOconf.SetupStreamlit()
 
-    st.title("Instalación del Software")
-    
+    st.title("Documentación y Ayuda")
+
 main()
