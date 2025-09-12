@@ -15,4 +15,7 @@ def main() -> None:
 
     st.title("Documentación y Ayuda")
 
+    if st.button("Imprimir Sesion State"):
+        st.write(st.session_state)
+
 main()

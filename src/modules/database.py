@@ -91,6 +91,8 @@ class ADOdatabase():
         Esta funcion permite crear tablas o insertar datos, retornando 1 o 0 para indicar el resultado de la accion.
         ARGUMENTOS:
         - consulta: La consulta escrita por el usuario.
+        NOTA:
+        - Devuelve 0 si no se logro la consulta, 1 si se realizo exitosamente
         """
         try:
             instancia.cursor.execute(consulta)

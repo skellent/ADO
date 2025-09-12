@@ -8,6 +8,22 @@ from time import sleep as esperar
 from modules.configuracion import ADOconfiguracion
 from modules.database import ADOdatabase
 
+# Funcion para convertir el tipo de usuario en funcion del string que se le pase
+def convertirTipo(tipo: str) -> int:
+    """
+    Esta funcion devuelve el tipo de usuario identificado como un integer para su correcto registro
+    """
+    if tipo == 'cajero':
+        return 1
+    elif tipo == 'Gestor de Inventario':
+        return 2
+    elif tipo == 'Gestor de Clientes':
+        return 3
+    elif tipo == 'Administrador':
+        return 4
+    else:
+        raise "Este usuario no puede ser registrado!"
+
 # Declaracion de funcion Principal
 def main() -> None:
     # Creacion de instancia de configuracion
@@ -78,6 +94,18 @@ def main() -> None:
                 placeholder = 'Misma contraseña',
                 icon = ':material/password:'
             )
+            # Tipo de usuario
+            tipoUsuario: st = st.selectbox(
+                "Cargo",
+                [
+                    'Cajero',
+                    'Gestor de Ventas',
+                    'Gestor de Inventario',
+                    'Gestor de Clientes',
+                    'Administrador'
+                ],
+                index = 0
+            )
             # Contrasena del Administrador
             adminContrasena: st = st.text_input(
                 key = 'adminPassword',
@@ -96,7 +124,7 @@ def main() -> None:
                 use_container_width = True
             )
 
-    # Logica de Registro o Inicio
+    # Logica de Inicio
     if iniciarSesion:
         if nombreUsuario and contrasena:
             # Se procede con el inicio de sesion
@@ -115,4 +143,28 @@ def main() -> None:
                 st.rerun()         
         else:
             st.warning("Escriba su Nombre de Usuario y Contrasena!")
+
+    # Logica de Registro
+    if crearUsuario:
+        if nombreRegistro and contrasenaRegistro and contrasenaVerificacion and adminContrasena and tipoUsuario:
+            # Se procede con las verificaciones
+            # 1. Contrasena mayor a 7 caracteres
+            if len(contrasenaRegistro) > 7:
+                # 2. Que las contrasenas sean iguales
+                if contrasenaRegistro == contrasenaVerificacion:
+                    # 2. Que no exista en la base de datos
+                    if ADOdb.ConsultaManual(f"""SELECT * FROM usuarios WHERE usuario = '{nombreRegistro}'""") == []:
+                        # El usuario no existe, se puede registrar
+                        if ADOdb.CreacionInsercion(f"""INSERT IGNORE INTO usuarios(usuario, contrasena, tipo) VALUES ('{nombreRegistro}', '{contrasenaRegistro}', '{convertirTipo(tipoUsuario)}')"""):
+                            st.success("Usuario registrado exitosamente! Dirigase a Iniciar Sesion")
+                        else:
+                            st.error("Ocurrio un error al registrar al usuario! Contacte a soporte.")
+                    else:
+                        st.error("Este usuario ya existe en la aplicacion!")
+                else:
+                        st.error("Las contrasenas no coinciden!")
+            else:
+                st.error("Contrasena demasiado corta!")
+        else:
+            st.warning("Llene todos los campos")
 main()
