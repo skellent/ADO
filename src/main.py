@@ -33,6 +33,8 @@ def main() -> None:
             # Actualizar el SideBar segun el tipo de usuario
             if st.session_state['usuarioTipo'] == 4:
                 pg = st.navigation(PagesAdministrador)
+            if st.session_state['usuarioTipo'] == 0:
+                pg = st.navigation(PagesAdministrador)
             pg.run()
 
             # Agregar al final siempre un boton para cerrar la sesion
@@ -45,6 +47,7 @@ def main() -> None:
                     icon = ':material/logout:')
                 if logOut:
                     del st.session_state['usuario']
+                    del st.session_state['usuarioTipo']
                     st.rerun()
         else:
             pg = st.navigation(PagesLogin)
