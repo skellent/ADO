@@ -33,3 +33,7 @@ flowchart TD
     1. Historial de Ventas: Muestra el historial de ventas del sistema.
     2. Realizar Venta: Permite realizar ventas de forma simplificada y auto registrable en el sistema.
     3. Cuotas Pendientes: Permite manejar las cuotas pendientes de ventas realizadas.
+
+## Historial
+- Skell's ADO tiene la capacidad de almacenar un historial de todas las consultas SQL realizadas, haciendo que el seguimiento de acciones sea más sencillo.
+- Es un archivo ".log" que se genera automaticamente.

@@ -7,10 +7,13 @@ import tomllib
 CONSTANTES = tomllib.load(open("./.streamlit/secrets.toml", "rb"))
 # Importacion de mariadb para la conexion
 import mariadb
+# Importacion de decorador para loggear consultas
+from modules.log import logger_acciones
 
 # Clase para Manejar Base de Datos
 class ADOdatabase():      
     # Imprime los datos para conectarse a la base de datos
+    @logger_acciones()
     def ImprimirValores(instancia) -> None:
         """
         Esta funcion simplemente imprime los valores usados en el constructor para la base de datos.
@@ -21,6 +24,7 @@ class ADOdatabase():
         print(instancia.cursor)
 
     # Funcion para crear nuevamente la conexion y el cursor
+    @logger_acciones()
     def CrearConexion(instancia) -> tuple:
         """
         Esta funcion se encarga de crear nuevamente la conexion de forma manual en caso de haberla cerrado por parte del desarrollador.
@@ -44,6 +48,7 @@ class ADOdatabase():
         return conexion, cursor
     
     # Funcion para cerrar la conexion
+    @logger_acciones()
     def CerrarConexion(instancia) -> None:
         """
         Esta funcion cierra manualmente la conexion con la base de datos
@@ -55,6 +60,7 @@ class ADOdatabase():
                 print("Ocurrio un error al cerrar la conexion a la base de datos: ", e)
 
     # Funcion para hacer una consulta completa a una tabla en la base de datos
+    @logger_acciones()
     def ConsultarTabla(instancia, tabla: str) -> list:
         """
         Esta funcion devuelve una tupla con todos los datos obtenidos de la tabla a consultar
@@ -65,6 +71,7 @@ class ADOdatabase():
         return instancia.cursor.fetchall()
 
     # Funcion para listar las tablax existentes en la base de datos
+    @logger_acciones()
     def ListarTablas(instancia) -> list:
         """
         Esta funcion simplemente revisa que tablas existen en la base de datos. en caso de no haber ninguna es porque el software no esta completamente instalado.
@@ -72,8 +79,8 @@ class ADOdatabase():
         instancia.cursor.execute("""SHOW TABLES""")
         return instancia.cursor.fetchall()
         
-
     # Consulta manual por parte del desarrollador para casos particulares
+    @logger_acciones()
     def ConsultaManual(instancia, consulta: str) -> tuple:
         """
         Esta funcion permite escribir consultas personalizadas para casos complejos.
@@ -86,6 +93,8 @@ class ADOdatabase():
         except Exception as e:
             print("Error al elaborar consulta manual: ", e)
     
+    # Funcion para realizar consultas personalizadas
+    @logger_acciones()
     def CreacionInsercion(instancia, consulta: str) -> int:
         """
         Esta funcion permite crear tablas o insertar datos, retornando 1 o 0 para indicar el resultado de la accion.
@@ -111,10 +120,6 @@ class ADOdatabase():
         instancia.parametroConexion = database
         # Se intenta crear el cursor y la conexion con una funcion
         instancia.conexion, instancia.cursor = instancia.CrearConexion()
-
-
-""" 
-"""
 
 # Funcion Principal | Prueba de las funciones
 def main() -> None:
