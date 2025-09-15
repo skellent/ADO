@@ -9,6 +9,7 @@ from modules.database import ADOdatabase
 
 # Importar pandas para formatear datos de la tabla
 import pandas as pd
+import io # Para generar tabla de Excel
 
 # Declaracion de funcion Principal
 def main() -> None:
@@ -32,6 +33,23 @@ def main() -> None:
             width = 'stretch',
             hide_index = True
         )
+        # Sistema de descarga de tabla de excel
+        output = io.BytesIO()
+        try:
+            with pd.ExcelWriter(output, engine='openpyxl') as writer:
+                tablaClientes.to_excel(writer, index=False, sheet_name='Lista')
+            excel_data = output.getvalue()
+            st.download_button(
+                label="Descargar Listado de Clientes como Archivo de Excel",
+                data=excel_data,
+                file_name="Listado_de_Clientes.xlsx",
+                use_container_width= True,
+                type = 'primary',
+                icon = ':material/save:'
+            )
+        except Exception as e:
+            st.error(f"Ocurrió un error al preparar el archivo Excel para descarga: {e}")
+            st.write("Asegúrate de tener `openpyxl` instalado (`pip install openpyxl`)")
     else:
         st.error("Error con Base de Datos")
 
