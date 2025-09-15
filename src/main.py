@@ -28,8 +28,6 @@ def main() -> None:
     else:
         # SOFTWARE INSTALADO POR COMPLETO
         if 'usuario' in st.session_state:
-            # Mensaje de Bienvenida para el usuario
-            st.write(f"Bienvenido, {st.session_state['usuario']}")
             # Actualizar el SideBar segun el tipo de usuario
             if st.session_state['usuarioTipo'] == 4:
                 pg = st.navigation(PagesAdministrador)
@@ -45,6 +43,8 @@ def main() -> None:
                     type = 'primary',
                     use_container_width = True,
                     icon = ':material/logout:')
+                # Mensaje de Bienvenida para el usuario
+                st.write(f"Usuario: {st.session_state['usuario']}")
                 if logOut:
                     del st.session_state['usuario']
                     del st.session_state['usuarioTipo']
