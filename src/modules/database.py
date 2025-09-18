@@ -81,21 +81,24 @@ class ADOdatabase():
         
     # Consulta manual por parte del desarrollador para casos particulares
     @logger_acciones()
-    def ConsultaManual(instancia, consulta: str) -> tuple:
+    def ConsultaManual(instancia, consulta: str, params = None) -> tuple:
         """
         Esta funcion permite escribir consultas personalizadas para casos complejos.
         ARGUMENTOS:
         - consulta: La consulta escrita por parte del desarrollador.
         """
         try:
-            instancia.cursor.execute(consulta)
+            if params:
+                instancia.cursor.execute(consulta, params)
+            else:
+                instancia.cursor.execute(consulta)
             return instancia.cursor.fetchall()
         except Exception as e:
             print("Error al elaborar consulta manual: ", e)
     
     # Funcion para realizar consultas personalizadas
     @logger_acciones()
-    def CreacionInsercion(instancia, consulta: str) -> int:
+    def CreacionInsercion(instancia, consulta: str, params = None) -> int:
         """
         Esta funcion permite crear tablas o insertar datos, retornando 1 o 0 para indicar el resultado de la accion.
         ARGUMENTOS:
@@ -104,7 +107,10 @@ class ADOdatabase():
         - Devuelve 0 si no se logro la consulta, 1 si se realizo exitosamente
         """
         try:
-            instancia.cursor.execute(consulta)
+            if params:
+                instancia.cursor.execute(consulta, params)
+            else:
+                instancia.cursor.execute(consulta)
             instancia.conexion.commit()
             return 1
         except Exception as e:

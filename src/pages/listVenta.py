@@ -1,51 +1,52 @@
 import streamlit as st
 
-# Importacion de Rich para mejorar la depuracion
 from rich import print
-
-# Importacion de clases
 from modules.configuracion import ADOconfiguracion
 from modules.database import ADOdatabase
 
-# Importar pandas para formatear datos de la tabla
 import pandas as pd
-import io # Para generar tabla de Excel
+import io
 
-# Declaracion de funcion Principal
 def main() -> None:
-    # Creacion de instancia de configuracion
-    ADOconf: object = ADOconfiguracion()
+    ADOconf = ADOconfiguracion()
     ADOconf.SetupStreamlit()
-    # Creacion de una instancia de database
-    ADOdb: object = ADOdatabase(st.secrets)
-    # ADOdb.ImprimirValores() # Impresion para verificar correcta creacion
+    ADOdb = ADOdatabase(st.secrets)
 
     st.title("Historial de Ventas")
 
     if ADOdb.CreacionInsercion(ADOconf.LeerTOML()['tablas']['ventas']):
-        datosProductos: list = ADOdb.ConsultarTabla('ventas')
-        tablaProductos: pd = pd.DataFrame(
-            datosProductos,
-            columns = ['id', 'Codigo Venta', 'Fecha de Venta', 'Cedula de Cliente', 'Total', 'Productos Vendidos', 'Metodo de Pago', 'Estado Venta', 'Vendedor', 'Observaciones', 'Fecha de Creacion', 'Fecha de Modificacion', 'Estado']
+        datosVentas = ADOdb.ConsultarTabla('ventas')
+        tablaVentas = pd.DataFrame(
+            datosVentas,
+            columns=[
+                'id', 'Fecha de Venta', 'ID Cliente', 'ID Producto', 'Codigo Producto', 'Nombre Producto',
+                'Cantidad', 'Precio Unitario', 'Subtotal', 'Total', 'Inicial', 'Valor Cuota', 'Metodo de Pago',
+                'Estado Venta', 'Cuotas', 'Cuotas Pagadas', 'Vendedor', 'Observaciones',
+                'Fecha de Creacion', 'Fecha de Actualizacion', 'Activo'
+            ]
         )
         st.dataframe(
-            tablaProductos[['Codigo Venta', 'Fecha de Venta', 'Cedula de Cliente', 'Total', 'Productos Vendidos', 'Metodo de Pago', 'Estado Venta', 'Vendedor', 'Observaciones']],
-            width = 'stretch',
-            hide_index = True
+            tablaVentas[
+                ['Fecha de Venta', 'ID Cliente', 'Codigo Producto', 'Nombre Producto', 'Cantidad',
+                 'Precio Unitario', 'Subtotal', 'Total', 'Inicial', 'Valor Cuota', 'Metodo de Pago',
+                 'Estado Venta', 'Cuotas', 'Cuotas Pagadas', 'Vendedor', 'Observaciones']
+            ],
+            width='stretch',
+            hide_index=True
         )
         # Sistema de descarga de tabla de excel
         output = io.BytesIO()
         try:
             with pd.ExcelWriter(output, engine='openpyxl') as writer:
-                tablaProductos.to_excel(writer, index=False, sheet_name='Historial')
+                tablaVentas.to_excel(writer, index=False, sheet_name='Historial')
             excel_data = output.getvalue()
             st.download_button(
                 label="Descargar Historial de Ventas como Archivo de Excel",
                 data=excel_data,
-                file_name="Historial_del_ventas.xlsx",
-                use_container_width= True,
-                type = 'primary',
-                icon = ':material/save:'
+                file_name="Historial_de_ventas.xlsx",
+                use_container_width=True,
+                type='primary',
+                icon=':material/save:'
             )
         except Exception as e:
             st.error(f"Ocurrió un error al preparar el archivo Excel para descarga: {e}")
