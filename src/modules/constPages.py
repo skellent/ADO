@@ -46,6 +46,70 @@ administrador: dict = {
     ]
 }
 
+gestorClientes: dict = {
+    "Clientes": [
+        st.Page("pages/listClientes.py", title="Lista de Clientes"),
+        st.Page("pages/regCliente.py", title="Registrar Cliente"),
+        st.Page("pages/editCliente.py", title="Editar Cliente")
+    ],
+    "Usuarios": [
+        st.Page("pages/chat.py", title="Chat Publico")
+    ],
+    "Información": [
+        st.Page("pages/ayuda.py", title="Ayuda con la Aplicación"),
+        st.Page("pages/about.py", title="Acerca de Skell's ADO")
+    ]
+}
+
+gestorVentas: dict = {
+    "Ventas": [
+        st.Page("pages/listVenta.py", title="Historial de Ventas"),
+        st.Page("pages/regVenta.py", title="Realizar Venta"),
+        st.Page("pages/cuoVenta.py", title="Cuotas Pendientes")
+    ],
+    "Usuarios": [
+        st.Page("pages/chat.py", title="Chat Publico")
+    ],
+    "Información": [
+        st.Page("pages/ayuda.py", title="Ayuda con la Aplicación"),
+        st.Page("pages/about.py", title="Acerca de Skell's ADO")
+    ]
+}
+
+gestorInventario: dict = {
+    "Inventario": [
+        st.Page("pages/listProduct.py", title="Lista de Productos"),
+        st.Page("pages/regProduct.py", title="Registrar Producto"),
+        st.Page("pages/editProduct.py", title="Editar Producto")
+    ],
+    "Usuarios": [
+        st.Page("pages/chat.py", title="Chat Publico")
+    ],
+    "Información": [
+        st.Page("pages/ayuda.py", title="Ayuda con la Aplicación"),
+        st.Page("pages/about.py", title="Acerca de Skell's ADO")
+    ]
+}
+
+cajero: dict = {
+    "Clientes": [
+        st.Page("pages/listClientes.py", title="Lista de Clientes"),
+    ],
+    "Inventario": [
+        st.Page("pages/listProduct.py", title="Lista de Productos"),
+    ],
+    "Ventas": [
+        st.Page("pages/regVenta.py", title="Realizar Venta"),
+    ],
+    "Usuarios": [
+        st.Page("pages/chat.py", title="Chat Publico")
+    ],
+    "Información": [
+        st.Page("pages/ayuda.py", title="Ayuda con la Aplicación"),
+        st.Page("pages/about.py", title="Acerca de Skell's ADO")
+    ]
+}
+
 """
 ## Modulos
 - ### Clientes:

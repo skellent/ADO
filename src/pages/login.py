@@ -13,7 +13,7 @@ def convertirTipo(tipo: str) -> int:
     """
     Esta funcion devuelve el tipo de usuario identificado como un integer para su correcto registro
     """
-    if tipo == 'cajero':
+    if tipo == 'Gestor de Ventas':
         return 1
     elif tipo == 'Gestor de Inventario':
         return 2
@@ -98,7 +98,6 @@ def main() -> None:
             tipoUsuario: st = st.selectbox(
                 "Cargo",
                 [
-                    'Cajero',
                     'Gestor de Ventas',
                     'Gestor de Inventario',
                     'Gestor de Clientes',
@@ -148,23 +147,26 @@ def main() -> None:
     if crearUsuario:
         if nombreRegistro and contrasenaRegistro and contrasenaVerificacion and adminContrasena and tipoUsuario:
             # Se procede con las verificaciones
-            # 1. Contrasena mayor a 7 caracteres
-            if len(contrasenaRegistro) > 7:
-                # 2. Que las contrasenas sean iguales
-                if contrasenaRegistro == contrasenaVerificacion:
-                    # 2. Que no exista en la base de datos
-                    if ADOdb.ConsultaManual(f"""SELECT * FROM usuarios WHERE usuario = '{nombreRegistro}'""") == []:
-                        # El usuario no existe, se puede registrar
-                        if ADOdb.CreacionInsercion(f"""INSERT IGNORE INTO usuarios(usuario, contrasena, tipo) VALUES ('{nombreRegistro}', '{contrasenaRegistro}', '{convertirTipo(tipoUsuario)}')"""):
-                            st.success("Usuario registrado exitosamente! Dirigase a Iniciar Sesion")
+            if len(nombreRegistro) > 3:
+                # 1. Contrasena mayor a 7 caracteres
+                if len(contrasenaRegistro) > 7:
+                    # 2. Que las contrasenas sean iguales
+                    if contrasenaRegistro == contrasenaVerificacion:
+                        # 2. Que no exista en la base de datos
+                        if ADOdb.ConsultaManual(f"""SELECT * FROM usuarios WHERE usuario = '{nombreRegistro}'""") == []:
+                            # El usuario no existe, se puede registrar
+                            if ADOdb.CreacionInsercion(f"""INSERT IGNORE INTO usuarios(usuario, contrasena, tipo) VALUES ('{nombreRegistro}', '{contrasenaRegistro}', '{convertirTipo(tipoUsuario)}')"""):
+                                st.success("Usuario registrado exitosamente! Dirigase a Iniciar Sesion")
+                            else:
+                                st.error("Ocurrio un error al registrar al usuario! Contacte a soporte.")
                         else:
-                            st.error("Ocurrio un error al registrar al usuario! Contacte a soporte.")
+                            st.error("Este usuario ya existe en la aplicacion!")
                     else:
-                        st.error("Este usuario ya existe en la aplicacion!")
+                            st.error("Las contrasenas no coinciden!")
                 else:
-                        st.error("Las contrasenas no coinciden!")
+                    st.error("Contrasena demasiado corta!")
             else:
-                st.error("Contrasena demasiado corta!")
+                st.error("Usuario demasiado corto!")
         else:
             st.warning("Llene todos los campos")
 main()

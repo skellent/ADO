@@ -12,6 +12,10 @@ from modules.database import ADOdatabase
 from modules.constPages import instalacion as PagesInstalacion
 from modules.constPages import login as PagesLogin
 from modules.constPages import administrador as PagesAdministrador
+from modules.constPages import gestorClientes as PagesGClientes
+from modules.constPages import gestorInventario as PagesGInventario
+from modules.constPages import gestorVentas as PagesGVentas
+from modules.constPages import cajero as PagesCajero
 
 # Declaracion de funcion Principal
 def main() -> None:
@@ -31,6 +35,12 @@ def main() -> None:
             # Actualizar el SideBar segun el tipo de usuario
             if st.session_state['usuarioTipo'] == 4:
                 pg = st.navigation(PagesAdministrador)
+            if st.session_state['usuarioTipo'] == 3:
+                pg = st.navigation(PagesGInventario)
+            if st.session_state['usuarioTipo'] == 2:
+                pg = st.navigation(PagesGClientes)
+            if st.session_state['usuarioTipo'] == 1:
+                pg = st.navigation(PagesGVentas)
             if st.session_state['usuarioTipo'] == 0:
                 pg = st.navigation(PagesAdministrador)
             pg.run()
