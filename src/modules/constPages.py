@@ -37,6 +37,9 @@ administrador: dict = {
         st.Page("pages/regVenta.py", title="Realizar Venta"),
         st.Page("pages/cuoVenta.py", title="Cuotas Pendientes")
     ],
+    "Usuarios": [
+        st.Page("pages/chat.py", title="Chat Publico")
+    ],
     "Información": [
         st.Page("pages/ayuda.py", title="Ayuda con la Aplicación"),
         st.Page("pages/about.py", title="Acerca de Skell's ADO")

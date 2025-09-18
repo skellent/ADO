@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS ventas (
     fecha_venta TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     -- Información del cliente
-    id_cliente INT NOT NULL,
+    id_cliente VARCHAR(20) NOT NULL,
 
     -- Información de productos
     id_producto INT NOT NULL,
@@ -113,11 +113,25 @@ CREATE TABLE IF NOT EXISTS ventas (
 
     -- Claves foráneas
     CONSTRAINT fk_venta_cliente FOREIGN KEY (id_cliente) 
-        REFERENCES clientes(id) 
+        REFERENCES clientes(cedula) 
         ON DELETE RESTRICT ON UPDATE CASCADE,
         
     CONSTRAINT fk_venta_producto FOREIGN KEY (id_producto) 
         REFERENCES productos(id) 
         ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+"""
+chat = """
+CREATE TABLE IF NOT EXISTS chat (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    usuario VARCHAR(100) NOT NULL,
+    mensaje TEXT NOT NULL,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    activo TINYINT(1) DEFAULT 1,
+    
+    -- Constraints de validación
+    CONSTRAINT chk_usuario_length CHECK (CHAR_LENGTH(usuario) BETWEEN 1 AND 100),
+    CONSTRAINT chk_mensaje_length CHECK (CHAR_LENGTH(mensaje) BETWEEN 1 AND 5000)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 """
