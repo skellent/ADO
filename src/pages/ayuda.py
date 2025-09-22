@@ -31,8 +31,5 @@ def main() -> None:
 
     st.title("Documentación y Ayuda")
     st.markdown(informacion)
-    st.divider()
-    if st.button("Imprimir Sesion State"):
-        st.write(st.session_state)
 
 main()
