@@ -120,7 +120,7 @@ def main() -> None:
             with colz:
                 cuotasCantidad = st.number_input(
                     "Cantidad de Cuotas",
-                    min_value = 1,
+                    min_value = 0,
                     max_value = 100,
                     step=1,
                     help = "Indique la cantidad de cuotas que debera cancelar el cliente",
@@ -128,7 +128,7 @@ def main() -> None:
                     key = "cuotas_cantidad_input"
                 )
             
-            cuotasPrecio: float = (float(totalProducto) - float(pagoInicial)) / float(cuotasCantidad)
+            cuotasPrecio: float = (float(totalProducto) - float(pagoInicial)) / float(cuotasCantidad) if cuotasCantidad > 0 else 0.0
             st.html(f"<center>Valor Unitario de cada Cuota: ${cuotasPrecio}</center>")
 
         # -- Text Area con notas sobre la venta
@@ -203,7 +203,7 @@ def main() -> None:
                                 {pagoInicial},
                                 {cuotasPrecio},
                                 'Cuotas',
-                                "Pendiente",
+                                "{"Pendiente" if cuotasCantidad > 0 else "Completada"}",
                                 {cuotasCantidad},
                                 0,
                                 '{vendedor}',

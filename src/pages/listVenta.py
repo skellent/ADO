@@ -27,7 +27,7 @@ def main() -> None:
         )
         st.dataframe(
             tablaVentas[
-                ['Fecha de Venta', 'ID Cliente', 'Codigo Producto', 'Nombre Producto', 'Cantidad',
+                ['id', 'Fecha de Venta', 'ID Cliente', 'Codigo Producto', 'Nombre Producto', 'Cantidad',
                  'Precio Unitario', 'Subtotal', 'Total', 'Inicial', 'Valor Cuota', 'Metodo de Pago',
                  'Estado Venta', 'Cuotas', 'Cuotas Pagadas', 'Vendedor', 'Observaciones']
             ],
