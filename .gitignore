@@ -2,5 +2,5 @@ src/.venv
 src/__pycache__
 src/modules/__pycache__
 src/*.pyc
-.streamlit/
+src/.streamlit/secrets.toml
 src/historial.log
