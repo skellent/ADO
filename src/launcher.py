@@ -14,10 +14,14 @@ comando = [
     "run",
     streamlit_script_name,
     "--server.port", # Parametro para seleccioanr un puerto
-    "5000"
+    "8501"
 ]
 
-print("—" * 70, end="")
+# Limpiar la pantalla
+import os
+os.system('cls' if os.name == 'nt' else 'clear')
+
+print("—" * 80, end="")
 print("""
   ╔═════════════════════════╗   ╔══════════════════════════════════════════════╗
 ┌─║ ▄▄▄ █  ▄ ▄▄▄ ▄  ▄ █ ▄▄▄ ║ ┌─║ Skell's ADO es un software basado en hosting ║
@@ -63,7 +67,7 @@ try:
             print(nuevoCodigoQR) # Imprime la cadena directamente
 
             print("\n" + "—" * 70)
-            print(f"Skell's CRM ejecutándose en: {urlApp}\n")
+            print(f"Skell's ADO ejecutándose en: {urlApp}\n")
             print("Presiona Ctrl+C aquí para detener la aplicación.")
             print("—" * 70)
 
@@ -78,7 +82,7 @@ try:
         try:
             proceso.wait()
         except KeyboardInterrupt:
-            print("\nDeteniendo Skell's CRM...")
+            print("\nDeteniendo Skell's ADO...")
             if proceso and proceso.poll() is None:
                  proceso.terminate()
                  proceso.wait()
